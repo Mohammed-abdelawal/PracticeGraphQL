@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+
+  db_postgis:
+    image: kartoza/postgis:14-3.1
+    volumes:
+      - ./db-postgis-data:/var/lib/postgresql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    ports:
+      - 5432:5432
+    command: >
+      sh -c "psql -v ON_ERROR_STOP=1 --username postgres --dbname postgres -c 'CREATE DATABASE PracticeGraphQlDB;'"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+
